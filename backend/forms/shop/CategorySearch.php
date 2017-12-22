@@ -5,10 +5,10 @@ namespace backend\forms\shop;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use shop\entities\shop\Category;
+use shop\entities\shop\category\Category;
 
 /**
- * CategorySearch represents the model behind the search form about `shop\entities\shop\Category`.
+ * CategorySearch represents the model behind the search form about `shop\entities\shop\category`.
  */
 class CategorySearch extends Category
 {

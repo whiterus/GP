@@ -1,8 +1,9 @@
 <?php
 
-namespace shop\entities\shop;
+namespace shop\entities\shop\product;
 
 
+use shop\entities\behaviors\MetaBehavior;
 use shop\entities\Meta;
 use yii\db\ActiveRecord;
 
@@ -10,29 +11,38 @@ class Product extends ActiveRecord
 {
     public $meta;
 
-    public function create($name, $title, $slug, $description, Meta $meta, $price, $category_id): self
+    public static function create($name, $title, $slug, $code, $description, $price, $available, $category_id, Meta $meta): self
     {
         $product = new static();
         $product->name = $name;
         $product->title = $title;
         $product->slug = $slug;
+        $product->code = $code;
         $product->description = $description;
         $product->meta = $meta;
         $product->price = $price;
+        $product->available = $available;
         $product->category_id = $category_id;
+        $product->status = 10;
+        $product->created_at = time();
+        $product->updated_at = time();
 
         return $product;
     }
 
-    public function edit($name, $title, $slug, $description, Meta $meta, $price, $category_id): void
+    public function edit($name, $title, $slug, $code, $description, $price, $available, $category_id, $status, Meta $meta): void
     {
         $this->name = $name;
         $this->title = $title;
+        $this->code = $code;
         $this->slug = $slug;
         $this->description = $description;
         $this->meta = $meta;
         $this->price = $price;
+        $this->available = $available;
         $this->category_id = $category_id;
+        $this->status = $status;
+        $this->updated_at = time();
     }
 
 
@@ -40,5 +50,13 @@ class Product extends ActiveRecord
     {
         return '{{%shop_products}}';
     }
+
+
+    public function behaviors() {
+        return [
+            MetaBehavior::className(),
+        ];
+    }
+
 
 }

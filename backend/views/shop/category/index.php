@@ -1,6 +1,6 @@
 <?php
 
-use shop\entities\shop\Category;
+use shop\entities\shop\category\Category;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Category', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create category', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

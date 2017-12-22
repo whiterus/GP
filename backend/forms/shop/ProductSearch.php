@@ -5,7 +5,7 @@ namespace backend\forms\shop;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use shop\entities\shop\Product;
+use shop\entities\shop\product\Product;
 
 /**
  * ProductSearch represents the model behind the search form about `shop\entities\shop\Product`.

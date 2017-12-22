@@ -2,7 +2,7 @@
 namespace shop\repositories\shop;
 
 
-use shop\entities\shop\Category;
+use shop\entities\shop\category\Category;
 
 class CategoryRepository
 {
@@ -10,7 +10,7 @@ class CategoryRepository
     public function get($id): Category
     {
         if (!$category = Category::findOne($id)) {
-            throw new \RuntimeException('Category is not found.');
+            throw new \RuntimeException('category is not found.');
         }
         return $category;
     }

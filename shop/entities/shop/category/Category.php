@@ -1,6 +1,6 @@
 <?php
 
-namespace shop\entities\shop;
+namespace shop\entities\shop\category;
 
 use paulzi\nestedsets\NestedSetsBehavior;
 use shop\entities\behaviors\MetaBehavior;
@@ -82,5 +82,6 @@ class Category extends \yii\db\ActiveRecord
     {
         return new CategoryQuery(get_called_class());
     }
+
 
 }

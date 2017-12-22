@@ -36,7 +36,9 @@ class MetaBehavior extends Behavior
 
     public function onBeforeSave(Event $event): void
     {
+
         $model = $event->sender;
+        //print '<pre>'; print_r( $model->{$this->attribute} ); print '</pre>';
         $model->setAttribute('meta_json', Json::encode([
             'title' => $model->{$this->attribute}->title,
             'description' => $model->{$this->attribute}->description,
