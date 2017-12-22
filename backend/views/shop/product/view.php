@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model shop\entities\shop\Category */
+/* @var $model shop\entities\shop\Product */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Categories', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="category-view">
+<div class="product-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -30,14 +30,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'name',
-            'slug',
             'title',
+            'slug',
+            'code',
             'description:ntext',
             'status',
             'meta_json',
-            //'lft',
-            //'rgt',
-            //'depth',
+            'price',
+            'available',
+            'category_id',
+            'comment_count',
+            'created_at',
+            'updated_at',
         ],
     ]) ?>
 

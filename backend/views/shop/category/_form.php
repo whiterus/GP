@@ -12,6 +12,9 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+
+    <?= $form->field($model, 'parentId')->dropDownList($model->parentCategoriesList()) ?>
+
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
@@ -22,16 +25,20 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'status')->textInput() ?>
 
-    <?=  $form->field($model, 'meta_json')->textInput() ?>
-
-    <?/*= $form->field($model, 'lft')->textInput() ?>
-
+    <?/*= $form->field($model, 'meta_json')->textInput() ?>
+    <?= $form->field($model, 'lft')->textInput() ?>
     <?= $form->field($model, 'rgt')->textInput() ?>
-
     <?= $form->field($model, 'depth')->textInput() */?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <h2>Мета теги</h2>
+        <?= $form->field($model->meta, 'title')->textInput() ?>
+        <?= $form->field($model->meta, 'description')->textarea(['rows' => 2]) ?>
+        <?= $form->field($model->meta, 'robots')->checkboxList(['nofollow' => 'nofollow', 'noindex' => 'noindex']) ?>
+    </div>
+
+    <div class="form-group">
+        <?=Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

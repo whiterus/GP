@@ -2,6 +2,9 @@
 
 namespace backend\controllers\shop;
 
+use shop\forms\manage\MetaForm;
+use shop\forms\manage\shop\CategoryForm;
+use shop\services\manage\shop\CategoryManageService;
 use Yii;
 use shop\entities\shop\Category;
 use backend\forms\shop\CategorySearch;
@@ -14,6 +17,16 @@ use yii\filters\VerbFilter;
  */
 class CategoryController extends Controller
 {
+
+    private $service;
+
+    public function __construct($id, $module, CategoryManageService $service, array $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        $this->service = $service;
+    }
+
+
     /**
      * @inheritdoc
      */
@@ -29,10 +42,7 @@ class CategoryController extends Controller
         ];
     }
 
-    /**
-     * Lists all Category models.
-     * @return mixed
-     */
+
     public function actionIndex()
     {
         $searchModel = new CategorySearch();
@@ -44,11 +54,7 @@ class CategoryController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Category model.
-     * @param integer $id
-     * @return mixed
-     */
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -56,41 +62,53 @@ class CategoryController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new Category model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+
     public function actionCreate()
     {
-        $model = new Category();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        $form = new CategoryForm();
+
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+
+            try {
+
+                $category = $this->service->create($form);
+                return $this->redirect(['view', 'id' => $category->id]);
+            } catch (\DomainException $e) {
+
+                Yii::$app->errorHandler->logException($e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
+            }
         }
+        return $this->render('create', [
+            'model' => $form,
+        ]);
     }
 
-    /**
-     * Updates an existing Category model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
+
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $category = $this->findModel($id);
+        $form = new CategoryForm($category);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+
+            //print_r($form->meta);die();
+
+
+            try {
+                $this->service->edit($category->id, $form);
+                return $this->redirect(['view', 'id' => $category->id]);
+            } catch (\DomainException $e) {
+                Yii::$app->errorHandler->logException($e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
+            }
         }
+
+        return $this->render('update', [
+            'model' => $form,
+            'category' => $category,
+        ]);
     }
 
     /**

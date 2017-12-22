@@ -3,25 +3,39 @@
 namespace shop\entities\shop;
 
 use paulzi\nestedsets\NestedSetsBehavior;
+use shop\entities\behaviors\MetaBehavior;
+use shop\entities\Meta;
 use shop\entities\shop\queries\CategoryQuery;
-use Yii;
 
-/**
- * This is the model class for table "shop_categories".
- *
- * @property integer $id
- * @property string $name
- * @property string $slug
- * @property string $title
- * @property string $description
- * @property integer $status
- * @property string $meta_json
- * @property integer $lft
- * @property integer $rgt
- * @property integer $depth
- */
+
 class Category extends \yii\db\ActiveRecord
 {
+
+    public $meta;
+
+    public static function create($name, $slug, $title, $description, Meta $meta): self
+    {
+        $category = new static();
+        $category->name = $name;
+        $category->slug = $slug;
+        $category->title = $title;
+        $category->description = $description;
+        $category->meta = $meta;
+        return $category;
+    }
+
+    public function edit($name, $slug, $title, $description, Meta $meta): void
+    {
+        $this->name = $name;
+        $this->slug = $slug;
+        $this->title = $title;
+        $this->description = $description;
+        $this->meta = $meta;
+    }
+
+
+
+
     /**
      * @inheritdoc
      */
@@ -33,44 +47,27 @@ class Category extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
-        return [
-            //[['name', 'slug', 'meta_json', 'lft', 'rgt', 'depth'], 'required'],
-            [['name', 'slug'], 'required'],
-            [['description', 'meta_json'], 'string'],
-            [['status', 'lft', 'rgt', 'depth'], 'integer'],
-            [['name', 'slug', 'title'], 'string', 'max' => 255],
-            [['slug'], 'unique'],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'slug' => 'Slug',
-            'title' => 'Title',
-            'description' => 'Description',
-            'status' => 'Status',
-            'meta_json' => 'Meta Json',
-            'lft' => 'Lft',
-            'rgt' => 'Rgt',
-            'depth' => 'Depth',
+            'name' => 'Имя',
+            'slug' => 'Синоним',
+            'title' => 'Заголовок раздела',
+            'description' => 'Содержимое',
+            'status' => 'Статус',
+            'meta_json' => 'Мета теги',
+            //'lft' => 'Lft',
+            //'rgt' => 'Rgt',
+            //'depth' => 'Depth',
         ];
-    }
+    }/**/
 
 
     public function behaviors() {
         return [
-            [
-                'class' => NestedSetsBehavior::className(),
-                // 'treeAttribute' => 'tree',
-            ],
+            NestedSetsBehavior::className(),
+            MetaBehavior::className(),
         ];
     }
 
