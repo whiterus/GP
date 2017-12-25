@@ -10,6 +10,7 @@ use yii\db\ActiveRecord;
 class Product extends ActiveRecord
 {
     public $meta;
+    public $image;
 
     public static function create($name, $title, $slug, $code, $description, $price, $available, $category_id, Meta $meta): self
     {
@@ -55,6 +56,17 @@ class Product extends ActiveRecord
     public function behaviors() {
         return [
             MetaBehavior::className(),
+            [
+                'class' => '\yiidreamteam\upload\ImageUploadBehavior',
+                'attribute' => 'imageUpload',
+                'thumbs' => [
+                    'thumb' => ['width' => 400, 'height' => 300],
+                ],
+                'filePath' => '@webroot/images/[[pk]].[[extension]]',
+                'fileUrl' => '/images/[[pk]].[[extension]]',
+                'thumbPath' => '@webroot/images/[[profile]]_[[pk]].[[extension]]',
+                'thumbUrl' => '/images/[[profile]]_[[pk]].[[extension]]',
+            ],
         ];
     }
 

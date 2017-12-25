@@ -52,6 +52,7 @@ class ProductForm extends CompositeForm
             [['price', 'status', 'category_id', 'available'], 'integer'],
             [['code'], 'string', 'max' => 10],
             [['name', 'slug', 'title'], 'string', 'max' => 255],
+            ['imageUpload', 'file', 'extensions' => 'jpeg, gif, png'],
             //[['slug'], 'unique'],
         ];
     }
@@ -75,5 +76,6 @@ class ProductForm extends CompositeForm
     {
         return ['meta'];
     }
+
 
 }

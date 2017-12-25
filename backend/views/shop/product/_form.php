@@ -10,12 +10,23 @@ use yii\widgets\ActiveForm;
 
 <div class="product-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php //$form = ActiveForm::begin(); ?>
+
+    <?php
+    $form = ActiveForm::begin([
+        'enableClientValidation' => false,
+        'options' => [
+                'enctype' => 'multipart/form-data',
+        ],
+    ]);
+    ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
+
+    <?//= $model->getImageFileUrl('imageUpload') ?>
 
     <?= $form->field($model, 'category_id')->dropDownList($model->CategoriesList()) ?>
 

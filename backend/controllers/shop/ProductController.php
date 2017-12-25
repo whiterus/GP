@@ -72,7 +72,6 @@ class ProductController extends Controller
 
     public function actionUpdate($id)
     {
-        //$model = $this->findModel($id);
         $product = $this->findModel($id);
         $form = new ProductForm($product);
 
