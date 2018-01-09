@@ -1,5 +1,5 @@
 <?php
-namespace shop\entities\shop\category;
+namespace shop\entities\shop\product;
 
 
 use yii\db\ActiveRecord;

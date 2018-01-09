@@ -1,10 +1,11 @@
 <?php
 
+use kartik\widgets\FileInput;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model shop\forms\manage\shop\ProductForm */
+/* @var $model shop\forms\manage\shop\Product\ProductForm */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -46,6 +47,22 @@ use yii\widgets\ActiveForm;
     <?=$form->field($model, 'updated_at')->textInput() ?>
     */ ?>
 
+
+    <div class="form-group">
+        <?/*= $form->field($model->photos, 'files[]')->widget(FileInput::class, [
+            'options' => [
+                'accept' => 'image/*',
+                'multiple' => true,
+            ]
+        ]) */?>
+    </div>
+
+    <div class="form-group">
+        <h2>Теги</h2>
+        <?//= $form->field($model->tags, 'name')->textInput() ?>
+        <?= $form->field($model->tags, 'existing')->checkboxList($model->tags->tagsList()) ?>
+        <?//= $form->field($model->tags, 'textNew')->textInput() ?>
+    </div>
 
     <div class="form-group">
         <h2>Мета теги</h2>

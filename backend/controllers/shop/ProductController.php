@@ -2,7 +2,7 @@
 
 namespace backend\controllers\shop;
 
-use shop\forms\manage\shop\ProductForm;
+use shop\forms\manage\shop\Product\ProductForm;
 use shop\services\manage\shop\ProductManageService;
 use Yii;
 use shop\entities\shop\product\Product;
@@ -53,7 +53,6 @@ class ProductController extends Controller
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
 
             try {
-
                 //print '<pre>'; print_r($form); print '</pre>';
                 $product = $this->service->create($form);
                 return $this->redirect(['view', 'id' => $product->id]);

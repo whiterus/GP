@@ -3,14 +3,20 @@
 namespace shop\entities\shop\product;
 
 
+use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use shop\entities\behaviors\MetaBehavior;
 use shop\entities\Meta;
+use shop\entities\shop\Tag;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\web\UploadedFile;
 
+/**
+ * @property ProductPhoto photos
+ */
 class Product extends ActiveRecord
 {
     public $meta;
-    public $image;
 
     public static function create($name, $title, $slug, $code, $description, $price, $available, $category_id, Meta $meta): self
     {
@@ -46,29 +52,78 @@ class Product extends ActiveRecord
         $this->updated_at = time();
     }
 
+    public function addPhoto(UploadedFile $file): void
+    {
+        $photos = $this->photos;
+        $photos[] = ProductPhoto::create($file);
+        //$this->updatePhotos($photos);
+        //$this->photos = $photos;
+        //$this->updatePhotos($photos);
+    }
+
+    public function assignTag($id)
+    {
+        $related = $this->tagRelation;
+        foreach ($related as $related_item) {
+            if ($related_item->isForTag($id)) {
+                return;
+            }
+        }
+        $related[] = ProductTags::create($id);
+        $this->tagRelation = $related;
+    }
+
+    public function revokeTags()
+    {
+        $this->tagRelation = [];
+    }
+
+    private function updatePhotos(array $photos): void
+    {
+        /*
+        foreach ($photos as $i => $photo) {
+            $photo->setSort($i);
+        }
+        */
+        //$this->photos = $photos;
+        //$this->populateRelation('mainPhoto', reset($photos));
+    }
+
+
+    public function getPhotos(): ActiveQuery
+    {
+        return $this->hasMany(ProductPhoto::class, ['product_id' => 'id'])->orderBy('sort');
+    }
+
+    public function getTagRelation(): ActiveQuery
+    {
+        return $this->hasMany(ProductTags::class, ['product_id' => 'id']);
+    }
+
+    public function getTags(): ActiveQuery
+    {
+        //return $this->hasMany(Tag::class, ['id' => 'tag_id'])->via('tagAssignments');
+        return $this->hasMany(Tag::class, ['id' => 'tag_id'])->via('tagRelation');
+    }
+
+
+
+
+    public function behaviors(): array
+    {
+        return [
+            MetaBehavior::className(),
+            [
+                'class' => SaveRelationsBehavior::className(),
+                //'relations' => ['categoryAssignments', 'tagAssignments', 'relatedAssignments', 'modifications', 'values', 'photos', 'reviews'],
+                'relations' => ['tagRelation'],
+            ],
+        ];
+    }
 
     public static function tableName(): string
     {
         return '{{%shop_products}}';
     }
-
-
-    public function behaviors() {
-        return [
-            MetaBehavior::className(),
-            [
-                'class' => '\yiidreamteam\upload\ImageUploadBehavior',
-                'attribute' => 'imageUpload',
-                'thumbs' => [
-                    'thumb' => ['width' => 400, 'height' => 300],
-                ],
-                'filePath' => '@webroot/images/[[pk]].[[extension]]',
-                'fileUrl' => '/images/[[pk]].[[extension]]',
-                'thumbPath' => '@webroot/images/[[profile]]_[[pk]].[[extension]]',
-                'thumbUrl' => '/images/[[profile]]_[[pk]].[[extension]]',
-            ],
-        ];
-    }
-
 
 }
